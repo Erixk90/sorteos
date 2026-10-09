@@ -68,13 +68,13 @@ export function loadGame(name) {
     nums.sort((a, b) => a - b);
     draws.push({
       date: rec.draw_date,
-      no: rec.sorteo,
+      no: rec.sorteo ?? null,
       nums,
       balota: rec.balota ?? null,
     });
   }
 
-  draws.sort((a, b) => a.no - b.no);
+  draws.sort((a, b) => a.date.localeCompare(b.date) || (a.no ?? 0) - (b.no ?? 0));
   return { name, cfg, draws, headers: header };
 }
 

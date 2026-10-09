@@ -13,13 +13,20 @@ const SOURCES = {
 for (const [name, url] of Object.entries(SOURCES)) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Fallo al descargar ${name}: HTTP ${res.status}`);
-  const text = await res.text();
+  const text = (await res.text()).replace(/^\uFEFF/, '');
   const lines = text.trim().split(/\r?\n/);
   const err = `Archivo ${name} no pasó validación (${lines.length} líneas). No se sobrescribe.`;
 
   const headerOk = /^(draw_date,sorteo,)/.test(lines[0] ?? '');
   const rows = lines.slice(1).filter(Boolean);
-  const rowOk = rows.every((l) => /^20\d\d-\d\d-\d\d,\d+,\d+,\d+,\d+,\d+,\d+$/.test(l));
+  const rowOk = rows.every((l) => {
+    const p = l.split(',');
+    if (p.length < 7 || p.length > 8) return false;
+    if (!/^20\d\d-\d\d-\d\d$/.test(p[0])) return false;
+    if (p[1] !== '' && !/^\d+$/.test(p[1])) return false;
+    for (let i = 2; i < p.length; i++) if (!/^\d+$/.test(p[i])) return false;
+    return true;
+  });
   if (!headerOk || rows.length < 50 || !rowOk) throw new Error(err);
 
   const prev = join(DATA, `${name}.csv`);
