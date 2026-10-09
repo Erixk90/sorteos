@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baloto · MiLoto — Analizador estadístico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1>🎱 Baloto <span class="amp">&</span> MiLoto</h1>
+    <p class="sub">Analizador estadístico de patrones, combinaciones e indicadores</p>
+    <p class="meta" id="generado">…</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-lot="miloto">MiLoto</button>
+    <button class="tab" data-lot="baloto">Baloto</button>
+  </nav>
+
+  <main id="app"></main>
+
+  <footer>
+    ⚠️ Las loterías son juegos de azar: cada combinación tiene la misma probabilidad.
+    Este sitio es una herramienta de análisis y gestión responsable. <b>Juega con responsabilidad.</b>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "baloto-analyzer",
+  "version": "1.0.0",
+  "description": "Sistema de análisis estadístico y generación de combinaciones para Baloto / Revancha / MiLoto (Colombia)",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "stats": "node src/cli.js stats --all",
+    "predict": "node src/cli.js predict miloto",
+    "combo": "node src/cli.js combo miloto",
+    "backtest": "node src/cli.js backtest miloto",
+    "report": "node src/cli.js report --all",
+    "fetch": "node scripts/fetch-data.js",
+    "build:web": "node scripts/generate-web.js",
+    "build:all": "npm run fetch && npm run build:web",
+    "serve": "node scripts/serve-web.js",
+    "predeploy": "npm run build:all",
+    "deploy": "gh-pages -d web --no-history"
+  }
+}

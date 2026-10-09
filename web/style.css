@@ -1,0 +1,105 @@
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --card2: #1c2230;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #f0b429;
+  --hot: #ff7b54;
+  --cold: #58a6ff;
+  --farol: #f85149;
+  --ok: #3fb950;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+.hero {
+  text-align: center;
+  padding: 34px 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: radial-gradient(1200px 400px at 50% -10%, rgba(240,180,41,.14), transparent);
+}
+.hero h1 { margin: 0; font-size: 28px; letter-spacing: .5px; }
+.amp { color: var(--accent); padding: 0 4px; }
+.sub { color: var(--muted); margin: 6px 0 0; font-size: 14px; }
+.meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
+
+.tabs {
+  display: flex; gap: 8px; justify-content: center;
+  padding: 14px 12px; background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+}
+.tab {
+  background: var(--card2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 22px; font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.tab.active { background: var(--accent); color: #1a1a1a; border-color: var(--accent); }
+
+main { max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; }
+
+.grid { display: grid; gap: 14px; }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+.card h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase;
+  letter-spacing: .8px; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.card h4 { margin: 0 0 8px; }
+.card p { margin: 5px 0; color: var(--text); }
+.muted { color: var(--muted); font-size: 13px; }
+
+.numbers {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.ball {
+  min-width: 34px; height: 34px; padding: 0 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: var(--card2);
+  border: 1px solid var(--border);
+  font-weight: 700; font-size: 14px;
+}
+.ball.small { min-width: 28px; height: 28px; font-size: 12px; padding: 0 6px; }
+.ball.hot { background: rgba(255,123,84,.18); border-color: var(--hot); color: var(--hot); }
+.ball.cold { background: rgba(88,166,255,.14); border-color: var(--cold); color: var(--cold); }
+.ball.farol { background: rgba(248,81,73,.16); border-color: var(--farol); color: var(--farol); text-decoration: line-through; }
+.ball.pick { background: var(--accent); border-color: var(--accent); color: #1a1a1a; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--border); text-align: left; }
+th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+td.num { font-weight: 700; }
+
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.pill.hot { background: rgba(255,123,84,.18); color: var(--hot); }
+.pill.cold { background: rgba(88,166,255,.14); color: var(--cold); }
+.pill.farol { background: rgba(248,81,73,.16); color: var(--farol); }
+
+.combo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.combo:last-child { border-bottom: none; }
+.combo .info { font-size: 12px; color: var(--muted); flex: 1; min-width: 200px; }
+.tag { color: var(--ok); }
+
+.badge { display: inline-block; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; margin: 3px; font-size: 12px; }
+.annotations { max-height: 340px; overflow: auto; }
+
+.progress { background: var(--card2); border-radius: 6px; height: 8px; overflow: hidden; margin-top: 4px; }
+.progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--cold), var(--ok)); }
+
+footer {
+  text-align: center; color: var(--muted); font-size: 12px;
+  padding: 22px 16px; border-top: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+}
