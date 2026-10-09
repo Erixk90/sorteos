@@ -2,3 +2,5 @@ node_modules/
 report/
 .DS_Store
 *.log
+*gh_credentials*
+*gh_token*

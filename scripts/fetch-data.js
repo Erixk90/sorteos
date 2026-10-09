@@ -27,6 +27,6 @@ for (const [name, url] of Object.entries(SOURCES)) {
   try { prevCount = readFileSync(prev, 'utf8').trim().split(/\r?\n/).length - 1; } catch {}
 
   writeFileSync(prev, text.replace(/\r\n/g, '\n').replace(/\n$/, '') + '\n', 'utf8');
-  console.log(`✓ ${name}: ${prevCount} → ${rows.length} sorteos (${rows.length > prevCount ? '↵ actualizado' : 'sin cambios')}`);
+  console.log(`✓ ${name}: ${prevCount} → ${rows.length} sorteos (${rows.length > prevCount ? 'actualizado' : 'sin cambios'})`);
 }
 console.log('\nDatos actualizados. Ejecuta ahora: node scripts/generate-web.js');
