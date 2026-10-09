@@ -2,7 +2,7 @@ name: Actualizar landing y desplegar a GitHub Pages
 
 on:
   schedule:
-    - cron: '45 1 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch:
   push:
     branches: [main]
