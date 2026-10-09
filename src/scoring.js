@@ -251,8 +251,13 @@ export function nextBalotoDraws(from = new Date(), count = 5) {
 function nextGameDates(weekdays, from, count) {
   const out = [];
   const d = new Date(from);
+  const jsDayNow = d.getDay(); // 0=Dom
+  const dayIdxNow = jsDayNow === 0 ? 7 : jsDayNow;
+  const drawHoy = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 22, 15);
+  if (weekdays.includes(dayIdxNow) && d.getTime() < drawHoy.getTime()) {
+    out.push(drawHoy);
+  }
   d.setDate(d.getDate() + 1);
-  d.setHours(22, 15, 0, 0);
   while (out.length < count) {
     const jsDay = d.getDay(); // 0=Dom
     const dayIdx = jsDay === 0 ? 7 : jsDay;
