@@ -12,9 +12,9 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
 
 function balls(nums, map) {
   const cls = (n) => {
-    if (map && map.farol.includes(n)) return 'ball small farol';
-    if (map && map.hot.includes(n)) return 'ball small hot';
-    if (map && map.cold.includes(n)) return 'ball small cold';
+    if (map && map.farol && map.farol.includes(n)) return 'ball small farol';
+    if (map && map.hot && map.hot.includes(n)) return 'ball small hot';
+    if (map && map.cold && map.cold.includes(n)) return 'ball small cold';
     return 'ball small';
   };
   return nums.map((n) => `<span class="${cls(n)}">${n}</span>`).join('');
