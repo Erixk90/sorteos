@@ -24,6 +24,19 @@ function card(title, inner) {
   return `<div class="card"><h3>${esc(title)}</h3>${inner}</div>`;
 }
 
+function gatilloBlock(gt) {
+  const flecha = gt.dir > 0 ? '↑ subir' : gt.dir < 0 ? '↓ bajar' : 'neutral';
+  return `
+    <div class="gatillo">
+      <h4>${gt.icono} ${esc(gt.nombre)} — suma objetivo <b>${gt.target}</b> <span class="muted">(${flecha})</span></h4>
+      <p class="muted">${esc(gt.explicacion)}</p>
+      <table>
+        <tr><th>#</th><th>Combinación</th><th>Suma</th><th>P/I</th><th>Peq/Gr</th></tr>
+        ${gt.combos.map((c, i) => `<tr><td>${i + 1}</td><td>${balls(c.nums, {})}</td><td>${c.sum}</td><td>${c.pares}P/${c.impares}I</td><td>${c.pequenos}Peq/${c.grandes}Gr</td></tr>`).join('')}
+      </table>
+    </div>`;
+}
+
 function patternsCard(g) {
   const f = g.flags;
   const rows = [
@@ -125,6 +138,15 @@ function renderGame(g, name) {
     <p class="muted" style="margin-top:8px">Mejor resultado: <b>${g.seguimiento.maxHits}/5</b> · Números base usados (top 8): ${g.seguimiento.numerosBase.join(', ')}</p>
     <p class="muted">Más abajo, en «Combinaciones recomendadas», está el cálculo actualizado ya con el sorteo #${g.seguimiento.sorteo} incluido (para el próximo sorteo).</p>
   `) : ''}
+
+  ${card('🎯 Tres gatillos — 15 recomendaciones más fuertes de cada uno', `
+    <p class="muted">Cada gatillo parte de una lógica distinta y genera sus propias 15 combinaciones. Compáralas y elige la que quieras jugar.</p>
+    <div class="gatillos">
+      ${gatilloBlock(g.gatillos.pendulo)}
+      ${gatilloBlock(g.gatillos.indicadores)}
+      ${gatilloBlock(g.gatillos.combinado)}
+    </div>
+  `)}
 
   ${card('Sistemas de combinación', `
     <h4>Sistema proporcional (8 números → 7 apuestas)</h4>

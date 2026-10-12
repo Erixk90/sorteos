@@ -6,6 +6,7 @@ import { buildState, analyzeNumbers } from '../src/engine.js';
 import { summarizeIndicators } from '../src/indicators.js';
 import { recommendCombos, backtest, nextMilotoDraws, nextBalotoDraws } from '../src/scoring.js';
 import { hits, categoriaMiloto, categoriaBaloto } from '../src/combinatorics.js';
+import { analizarGatillos } from '../src/gatillos.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const WEB = join(__dirname, '..', 'web');
@@ -100,6 +101,7 @@ function buildGameData(name) {
     bandas: col.bandas,
     bandasAusentesUltimo: state.bandasAbsentesUltimo,
     seguimiento: buildSeguimiento(game, cfg),
+    gatillos: analizarGatillos(state),
     ranking: rec.ranking.slice(0, 25).map((x) => ({
       num: x.num,
       score: +x.score.toFixed(2),

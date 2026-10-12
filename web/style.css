@@ -93,6 +93,12 @@ td.num { font-weight: 700; }
 .badge { display: inline-block; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; margin: 3px; font-size: 12px; }
 .annotations { max-height: 340px; overflow: auto; }
 
+.gatillos { display: grid; gap: 16px; }
+.gatillo { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.gatillo h4 { margin: 0 0 4px; font-size: 15px; }
+.gatillo table { margin-top: 8px; }
+.gatillo table td:nth-child(2) { display: flex; flex-wrap: wrap; gap: 4px; }
+
 .progress { background: var(--card2); border-radius: 6px; height: 8px; overflow: hidden; margin-top: 4px; }
 .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--cold), var(--ok)); }
 
