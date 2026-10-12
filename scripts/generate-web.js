@@ -78,6 +78,8 @@ function buildGameData(name) {
       num: x.num,
       score: +x.score.toFixed(2),
       freq: +x.freqPct.toFixed(1),
+      freq50: +x.freq50.toFixed(1),
+      last50: x.last50,
       last10: x.last10,
       last5: x.last5,
       gap: x.lastGap,

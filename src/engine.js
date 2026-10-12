@@ -55,6 +55,8 @@ export function analyzeNumbers(game) {
     const c5 = appearances.filter((a) => a >= total - 5).length;
     const c10 = appearances.filter((a) => a >= total - 10).length;
     const c20 = appearances.filter((a) => a >= total - 20).length;
+    const window50 = Math.min(50, total);
+    const c50 = appearances.filter((a) => a >= total - window50).length;
 
     const isHot = c10 >= 2 && c5 >= 1;
     const isCold = c10 === 0;
@@ -87,6 +89,8 @@ export function analyzeNumbers(game) {
       last5: c5,
       last10: c10,
       last20: c20,
+      last50: c50,
+      freq50: (100 * c50) / window50,
       lastGap,
       maxGapEver: gaps.length ? Math.max(...gaps) : lastGap,
       gaps,

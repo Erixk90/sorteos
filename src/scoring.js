@@ -10,7 +10,8 @@ import { summarizeIndicators } from './indicators.js';
 // ============================================================================
 
 export const WEIGHTS = {
-  freq: 1.0,        // frecuencia histórica normalizada
+  freq: 0.7,        // frecuencia histórica normalizada (contexto de largo plazo)
+  freq50: 0.9,      // frecuencia en las últimas 50 tiradas (motor de rotación)
   hot: 2.0,         // 2+ en últimas 10 y 1+ en últimas 5
   cold: 0.3,        // contribución del "1 frío" de la regla 80/20
   farol: -3.0,      // 20+ sorteos sin salir → NO apostar
@@ -45,6 +46,7 @@ export function scoreNumbers(state) {
   const rated = numbers.map((x) => {
     let s = 0;
     s += WEIGHTS.freq * (100 * x.count / total);
+    s += WEIGHTS.freq50 * x.freq50;
     if (x.isHot) s += WEIGHTS.hot;
     if (x.isCold) s += WEIGHTS.cold;
     if (x.farol) s += WEIGHTS.farol;
@@ -81,6 +83,8 @@ function buildReasons(x) {
   if (x.doblete) r.push('🔁 Doblete (intervalo repetido)');
   if (x.triple) r.push('🔂 Triple (3 intervalos iguales)');
   if (x.estrella) r.push('⭐ Estrella (cada ~5 sorteos)');
+  if (x.last50 >= 10) r.push(`📊 Muy frecuente en últimas 50 (${x.last50} veces)`);
+  else if (x.last50 >= 7) r.push(`📊 Frecuente en últimas 50 (${x.last50} veces)`);
   if (x.last5 > 0) r.push(`Repareció en ${x.last5} de las últimas 5`);
   if (r.length === 0) r.push('Sin patrón destacado');
   return r;

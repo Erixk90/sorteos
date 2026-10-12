@@ -76,13 +76,14 @@ function renderGame(g, name) {
     ${card('Ranking de números (score)', `
       <div class="annotations">
       <table>
-        <tr><th>#</th><th>Nº</th><th>Score</th><th>Frec%</th><th>Ú10</th><th>Ú5</th><th>Gap</th><th>Señal</th></tr>
+        <tr><th>#</th><th>Nº</th><th>Score</th><th>Frec%</th><th>Ú50</th><th>Ú10</th><th>Ú5</th><th>Gap</th><th>Señal</th></tr>
         ${g.ranking.map((r, i) => `
           <tr>
             <td>${i + 1}</td>
             <td class="num">${r.num}</td>
             <td>${r.score}</td>
             <td>${r.freq}</td>
+            <td><b>${r.last50 ?? '—'}</b></td>
             <td>${r.last10}</td>
             <td>${r.last5}</td>
             <td>${r.gap}</td>
