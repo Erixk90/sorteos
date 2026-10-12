@@ -24,6 +24,22 @@ function card(title, inner) {
   return `<div class="card"><h3>${esc(title)}</h3>${inner}</div>`;
 }
 
+function tagGatillo(icono, x) {
+  return ` <span class="pill ${x.count3 ? 'hot' : x.best >= 2 ? 'cold' : ''}">${icono} ${x.best}/5</span>`;
+}
+
+function grupoGatillo(nombre, x) {
+  return `<div class="sig-grupo">
+    <h5>${nombre} <span class="muted">· mejor ${x.best}/5${x.count3 ? ` · ${x.count3}×≥3` : ''}</span></h5>
+    <table>
+      <tr><th>#</th><th>Combinación</th><th>Suma</th><th>Aciertos</th></tr>
+      ${x.combos.map((c, i) => `<tr class="${c.hits >= 2 ? 'hit' : ''}">
+        <td>${i + 1}</td><td>${balls(c.nums, {})}</td><td>${c.sum}</td><td><b>${c.hits}</b></td>
+      </tr>`).join('')}
+    </table>
+  </div>`;
+}
+
 function gatillosTable(g) {
   const gs = [g.gatillos.pendulo, g.gatillos.indicadores, g.gatillos.combinado];
   const head = gs
@@ -172,20 +188,24 @@ function renderGame(g, name) {
     `)}
   </div>
 
-  ${g.seguimiento ? card(`Seguimiento · recomendados del sorteo #${g.seguimiento.sorteo}`, `
-    <p class="muted">Números que el modelo habría recomendado <b>antes</b> del sorteo #${g.seguimiento.sorteo} (${fmtFecha(g.seguimiento.fecha)}).</p>
-    <p>Resultado real: ${balls(g.seguimiento.resultado, {})}${g.seguimiento.balota ? ' · Súper <b>' + g.seguimiento.balota + '</b>' : ''}</p>
-    <table>
-      <tr><th>#</th><th>Combinación recomendada</th><th>Aciertos</th><th>Premio</th></tr>
-      ${g.seguimiento.combos.map((c, i) => `<tr>
-        <td>${i + 1}</td>
-        <td>${balls(c.nums, {})}</td>
-        <td><b>${c.hits}</b></td>
-        <td>${c.categoria ? esc(c.categoria) : '—'}</td>
-      </tr>`).join('')}
-    </table>
-    <p class="muted" style="margin-top:8px">Mejor resultado: <b>${g.seguimiento.maxHits}/5</b> · Números base usados (top 8): ${g.seguimiento.numerosBase.join(', ')}</p>
-    <p class="muted">Arriba, en «Recomendaciones — 3 gatillos», está el cálculo actualizado ya con el sorteo #${g.seguimiento.sorteo} incluido (para el próximo sorteo).</p>
+  ${g.seguimiento ? card('Seguimiento · qué recomendó cada gatillo en cada sorteo (walk-forward)', `
+    <p class="muted">Para cada uno de los últimos ${g.seguimiento.sorteos} sorteos se calcularon los 3 gatillos <b>solo con los datos previos</b>. Haz clic en un sorteo para ver la <b>lista completa</b> de lo recomendado ese día y los aciertos (verde = dio 2+).</p>
+    <div class="sig-lista">
+      ${g.seguimiento.filas.map((f) => `
+        <details class="sig-item">
+          <summary>
+            <b>#${f.sorteo}</b> · ${fmtFecha(f.fecha)} · Resultado: ${balls(f.resultado, {})}${f.balota ? ` <span class="muted">S${f.balota}</span>` : ''}
+            <span class="sig-tags">${tagGatillo('⚖️', f.pendulo)}${tagGatillo('📈', f.indicadores)}${tagGatillo('🎯', f.combinado)}</span>
+          </summary>
+          <div class="sig-body">
+            ${grupoGatillo('⚖️ Péndulo', f.pendulo)}
+            ${grupoGatillo('📈 Indicadores', f.indicadores)}
+            ${grupoGatillo('🎯 Combinado', f.combinado)}
+          </div>
+        </details>`).join('')}
+    </div>
+    <p class="muted" style="margin-top:8px">Promedio de mejor acierto (${g.seguimiento.sorteos} sorteos): ⚖️ ${g.seguimiento.resumen[0].promBest}/5 · 📈 ${g.seguimiento.resumen[1].promBest}/5 · 🎯 ${g.seguimiento.resumen[2].promBest}/5. Sorteos con ≥3 aciertos: ⚖️ ${g.seguimiento.resumen[0].sorteosCon3} · 📈 ${g.seguimiento.resumen[1].sorteosCon3} · 🎯 ${g.seguimiento.resumen[2].sorteosCon3}.</p>
+    <p class="muted">Arriba, en «Recomendaciones — 3 gatillos», está el cálculo actualizado para el próximo sorteo.</p>
   `) : ''}
   `;
   app.innerHTML = html;

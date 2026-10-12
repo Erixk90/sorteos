@@ -20,6 +20,10 @@ Reordenar la página y diferenciar visualmente las recomendaciones.
 - [x] **Look diferente**: el bloque de recomendaciones usa `.card.destacado`
       (borde y título color acento). El resto queda normal con su título.
 - [x] Comparación **lado a lado** en una sola tabla de 3 columnas (15 cada una).
+- [x] **Seguimiento = historial** de los últimos **10 sorteos** (walk-forward), en
+      **desplegables**: cada sorteo se abre y muestra la **lista completa** de los 3
+      gatillos (15 combinaciones cada uno) con suma y **aciertos** vs. el resultado real
+      (filas verdes = 2+). Resumen con mejor acierto y ≥3. Ya no mide el modelo base.
 
 ## Pendiente / por confirmar
 - ¿Deployar? (por ahora **NO** hasta tu aprobación).

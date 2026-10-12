@@ -14,28 +14,55 @@ const WEB = join(__dirname, '..', 'web');
 function pad(n = 2) { return String(n).padStart(2, '0'); }
 const fmtLocal = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
-function buildSeguimiento(game, cfg) {
+function buildSeguimiento(game, cfg, n = 10) {
   const draws = game.draws;
-  if (draws.length < 2) return null;
-  const train = { name: game.name, cfg, draws: draws.slice(0, -1) };
-  const state = buildState(train);
-  const rec = recommendCombos(state);
-  const actual = draws[draws.length - 1];
-  const combos = rec.topCombos.slice(0, 5).map((c) => {
-    const h = hits(c.nums, actual.nums);
-    const cat = cfg.hasBalota ? categoriaBaloto(h, false) : categoriaMiloto(h);
-    return { nums: c.nums, hits: h, categoria: cat };
-  });
-  const maxHits = combos.length ? Math.max(...combos.map((c) => c.hits)) : 0;
-  return {
-    sorteo: actual.no,
-    fecha: actual.date,
-    resultado: actual.nums,
-    balota: actual.balota ?? null,
-    numerosBase: rec.ranking.slice(0, 8).map((x) => x.num),
-    combos,
-    maxHits,
+  const start = Math.max(1, draws.length - n);
+  const evalGatillo = (gt, actual) => {
+    const combos = gt.combos.map((c) => {
+      const h = hits(c.nums, actual);
+      return { nums: c.nums, sum: c.sum, hits: h };
+    });
+    let best = 0;
+    let count2 = 0;
+    let count3 = 0;
+    for (const c of combos) {
+      if (c.hits > best) best = c.hits;
+      if (c.hits >= 2) count2++;
+      if (c.hits >= 3) count3++;
+    }
+    const top = gt.combos[0]?.nums ?? [];
+    const topHits = combos[0]?.hits ?? 0;
+    return { top, topHits, best, count2, count3, combos };
   };
+  const filas = [];
+  for (let t = start; t < draws.length; t++) {
+    const train = { name: game.name, cfg, draws: draws.slice(0, t) };
+    const state = buildState(train);
+    const g = analizarGatillos(state);
+    const actual = draws[t].nums;
+    filas.push({
+      sorteo: draws[t].no,
+      fecha: draws[t].date,
+      resultado: actual,
+      balota: draws[t].balota ?? null,
+      pendulo: evalGatillo(g.pendulo, actual),
+      indicadores: evalGatillo(g.indicadores, actual),
+      combinado: evalGatillo(g.combinado, actual),
+    });
+  }
+  filas.reverse();
+  const resumen = ['pendulo', 'indicadores', 'combinado'].map((k) => {
+    const bests = filas.map((f) => f[k].best);
+    const con2 = filas.filter((f) => f[k].count2 > 0).length;
+    const con3 = filas.filter((f) => f[k].count3 > 0).length;
+    return {
+      clave: k,
+      promBest: +(bests.reduce((a, b) => a + b, 0) / bests.length).toFixed(2),
+      sorteosCon2: con2,
+      sorteosCon3: con3,
+    };
+  });
+  return { sorteos: filas.length, filas, resumen };
 }
 
 function buildGameData(name) {

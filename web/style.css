@@ -107,6 +107,15 @@ td.num { font-weight: 700; }
 .gtabla td:nth-child(n+2) { line-height: 2.1; }
 .gtabla .ball { margin: 2px 3px; }
 
+.sig-lista { display: grid; gap: 8px; }
+.sig-item { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }
+.sig-item > summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.sig-tags { margin-left: auto; display: flex; gap: 6px; }
+.sig-body { margin-top: 10px; display: grid; gap: 12px; }
+.sig-grupo h5 { margin: 4px 0 6px; font-size: 13px; color: var(--accent); }
+tr.hit td { background: rgba(63,185,80,.10); }
+tr.hit td:last-child { color: var(--ok); font-weight: 700; }
+
 .progress { background: var(--card2); border-radius: 6px; height: 8px; overflow: hidden; margin-top: 4px; }
 .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--cold), var(--ok)); }
 
