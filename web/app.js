@@ -110,6 +110,22 @@ function renderGame(g, name) {
     `)}
   </div>
 
+  ${g.seguimiento ? card(`Seguimiento · recomendados del sorteo #${g.seguimiento.sorteo}`, `
+    <p class="muted">Números que el modelo habría recomendado <b>antes</b> del sorteo #${g.seguimiento.sorteo} (${fmtFecha(g.seguimiento.fecha)}).</p>
+    <p>Resultado real: ${balls(g.seguimiento.resultado, {})}${g.seguimiento.balota ? ' · Súper <b>' + g.seguimiento.balota + '</b>' : ''}</p>
+    <table>
+      <tr><th>#</th><th>Combinación recomendada</th><th>Aciertos</th><th>Premio</th></tr>
+      ${g.seguimiento.combos.map((c, i) => `<tr>
+        <td>${i + 1}</td>
+        <td>${balls(c.nums, {})}</td>
+        <td><b>${c.hits}</b></td>
+        <td>${c.categoria ? esc(c.categoria) : '—'}</td>
+      </tr>`).join('')}
+    </table>
+    <p class="muted" style="margin-top:8px">Mejor resultado: <b>${g.seguimiento.maxHits}/5</b> · Números base usados (top 8): ${g.seguimiento.numerosBase.join(', ')}</p>
+    <p class="muted">Más abajo, en «Combinaciones recomendadas», está el cálculo actualizado ya con el sorteo #${g.seguimiento.sorteo} incluido (para el próximo sorteo).</p>
+  `) : ''}
+
   ${card('Sistemas de combinación', `
     <h4>Sistema proporcional (8 números → 7 apuestas)</h4>
     <div class="numbers" style="margin-bottom:8px">${balls(g.sistemas.proporcional.numeros, { hot: g.flags.hot, cold: g.flags.cold, farol: g.flags.farol })}</div>
@@ -122,7 +138,7 @@ function renderGame(g, name) {
     </table>
     <h4 style="margin-top:14px">Sistema total (top 8 → mejores 10 por índice)</h4>
     <table><tr><th>#</th><th>Combinación</th><th>Suma</th><th>P/I</th></tr>
-    ${g.sistemas.total.map((c, i) => `<tr><td>${i + 1}</td><td>${balls(c.nums, {})}</td><td>${c.suma}</td><td>${c.pares}P/${c.impares}I</td></tr>`).join('')}
+    ${g.sistemas.total.map((c, i) => `<tr><td>${i + 1}</td><td>${balls(c.nums, {})}</td><td>${c.sum}</td><td>${c.pares}P/${c.impares}I</td></tr>`).join('')}
     </table>
   `)}
 

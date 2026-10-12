@@ -5,12 +5,37 @@ import { loadGame, gameConfig, GAMES } from '../src/loader.js';
 import { buildState, analyzeNumbers } from '../src/engine.js';
 import { summarizeIndicators } from '../src/indicators.js';
 import { recommendCombos, backtest, nextMilotoDraws, nextBalotoDraws } from '../src/scoring.js';
+import { hits, categoriaMiloto, categoriaBaloto } from '../src/combinatorics.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const WEB = join(__dirname, '..', 'web');
 
 function pad(n = 2) { return String(n).padStart(2, '0'); }
 const fmtLocal = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+function buildSeguimiento(game, cfg) {
+  const draws = game.draws;
+  if (draws.length < 2) return null;
+  const train = { name: game.name, cfg, draws: draws.slice(0, -1) };
+  const state = buildState(train);
+  const rec = recommendCombos(state);
+  const actual = draws[draws.length - 1];
+  const combos = rec.topCombos.slice(0, 5).map((c) => {
+    const h = hits(c.nums, actual.nums);
+    const cat = cfg.hasBalota ? categoriaBaloto(h, false) : categoriaMiloto(h);
+    return { nums: c.nums, hits: h, categoria: cat };
+  });
+  const maxHits = combos.length ? Math.max(...combos.map((c) => c.hits)) : 0;
+  return {
+    sorteo: actual.no,
+    fecha: actual.date,
+    resultado: actual.nums,
+    balota: actual.balota ?? null,
+    numerosBase: rec.ranking.slice(0, 8).map((x) => x.num),
+    combos,
+    maxHits,
+  };
+}
 
 function buildGameData(name) {
   const game = loadGame(name);
@@ -74,6 +99,7 @@ function buildGameData(name) {
     bilateralesUltimo: state.bilateralesUltimo,
     bandas: col.bandas,
     bandasAusentesUltimo: state.bandasAbsentesUltimo,
+    seguimiento: buildSeguimiento(game, cfg),
     ranking: rec.ranking.slice(0, 25).map((x) => ({
       num: x.num,
       score: +x.score.toFixed(2),
