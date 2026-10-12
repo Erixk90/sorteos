@@ -93,11 +93,12 @@ td.num { font-weight: 700; }
 .badge { display: inline-block; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; margin: 3px; font-size: 12px; }
 .annotations { max-height: 340px; overflow: auto; }
 
-.gatillos { display: grid; gap: 16px; }
-.gatillo { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
-.gatillo h4 { margin: 0 0 4px; font-size: 15px; }
-.gatillo table { margin-top: 8px; }
-.gatillo table td:nth-child(2) { display: flex; flex-wrap: wrap; gap: 4px; }
+.gtabla-wrap { overflow-x: auto; }
+.gtabla { min-width: 640px; }
+.gtabla th { text-align: center; }
+.gtabla th:first-child, .gtabla td:first-child { width: 34px; text-align: center; color: var(--muted); }
+.gtabla td:nth-child(n+2) { line-height: 2.1; }
+.gtabla .ball { margin: 2px 3px; }
 
 .progress { background: var(--card2); border-radius: 6px; height: 8px; overflow: hidden; margin-top: 4px; }
 .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--cold), var(--ok)); }

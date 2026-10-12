@@ -24,17 +24,29 @@ function card(title, inner) {
   return `<div class="card"><h3>${esc(title)}</h3>${inner}</div>`;
 }
 
-function gatilloBlock(gt) {
-  const flecha = gt.dir > 0 ? '↑ subir' : gt.dir < 0 ? '↓ bajar' : 'neutral';
-  return `
-    <div class="gatillo">
-      <h4>${gt.icono} ${esc(gt.nombre)} — suma objetivo <b>${gt.target}</b> <span class="muted">(${flecha})</span></h4>
-      <p class="muted">${esc(gt.explicacion)}</p>
-      <table>
-        <tr><th>#</th><th>Combinación</th><th>Suma</th><th>P/I</th><th>Peq/Gr</th></tr>
-        ${gt.combos.map((c, i) => `<tr><td>${i + 1}</td><td>${balls(c.nums, {})}</td><td>${c.sum}</td><td>${c.pares}P/${c.impares}I</td><td>${c.pequenos}Peq/${c.grandes}Gr</td></tr>`).join('')}
-      </table>
-    </div>`;
+function gatillosTable(g) {
+  const gs = [g.gatillos.pendulo, g.gatillos.indicadores, g.gatillos.combinado];
+  const head = gs
+    .map((gt) => `<th>${gt.icono} ${esc(gt.nombre)}<br><span class="muted">objetivo ${gt.target}</span></th>`)
+    .join('');
+  const maxN = Math.max(...gs.map((gt) => gt.combos.length));
+  let body = '';
+  for (let i = 0; i < maxN; i++) {
+    body += `<tr><td class="num">${i + 1}</td>`;
+    for (const gt of gs) {
+      const c = gt.combos[i];
+      body += `<td>${c ? balls(c.nums, {}) : '—'}</td>`;
+    }
+    body += '</tr>';
+  }
+  const explain = gs
+    .map((gt) => `<div><b>${gt.icono} ${esc(gt.nombre)}</b><p class="muted">${esc(gt.explicacion)}</p></div>`)
+    .join('');
+  return `<div class="gtabla-wrap"><table class="gtabla">
+      <thead><tr><th>#</th>${head}</tr></thead>
+      <tbody>${body}</tbody>
+    </table></div>
+    <div class="grid grid-3" style="margin-top:12px">${explain}</div>`;
 }
 
 function patternsCard(g) {
@@ -139,13 +151,9 @@ function renderGame(g, name) {
     <p class="muted">Más abajo, en «Combinaciones recomendadas», está el cálculo actualizado ya con el sorteo #${g.seguimiento.sorteo} incluido (para el próximo sorteo).</p>
   `) : ''}
 
-  ${card('🎯 Tres gatillos — 15 recomendaciones más fuertes de cada uno', `
-    <p class="muted">Cada gatillo parte de una lógica distinta y genera sus propias 15 combinaciones. Compáralas y elige la que quieras jugar.</p>
-    <div class="gatillos">
-      ${gatilloBlock(g.gatillos.pendulo)}
-      ${gatilloBlock(g.gatillos.indicadores)}
-      ${gatilloBlock(g.gatillos.combinado)}
-    </div>
+  ${card('🎯 Tres gatillos — 15 combinaciones cada uno (comparación lado a lado)', `
+    <p class="muted">Cada columna es un gatillo con su propia lógica y su suma objetivo. Compara las 3 listas y elige.</p>
+    ${gatillosTable(g)}
   `)}
 
   ${card('Sistemas de combinación', `
