@@ -59,6 +59,13 @@ main { max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; }
 .card p { margin: 5px 0; color: var(--text); }
 .muted { color: var(--muted); font-size: 13px; }
 
+.card.destacado {
+  border: 2px solid var(--accent);
+  background: linear-gradient(180deg, rgba(240,180,41,.08), var(--card));
+  box-shadow: 0 8px 30px rgba(240,180,41,.08);
+}
+.card.destacado h3 { color: var(--accent); border-bottom-color: rgba(240,180,41,.35); font-size: 15px; }
+
 .numbers {
   display: flex; flex-wrap: wrap; gap: 6px;
 }

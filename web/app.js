@@ -78,6 +78,12 @@ function renderGame(g, name) {
   const ind = g.indicadores;
 
   const html = `
+  <div class="card destacado">
+    <h3>🎯 Recomendaciones — comparación de los 3 gatillos</h3>
+    <p class="muted">Cada columna es un gatillo con su propia lógica y su suma objetivo. Compara las 3 listas (15 combinaciones cada una) y elige cuál jugar.</p>
+    ${gatillosTable(g)}
+  </div>
+
   <div class="grid grid-2">
     ${stat('🎱', 'Último sorteo', `#${last.no}<br><span class="muted" style="font-size:12px">${fmtFecha(last.fecha)}</span>`)}
     ${stat('🔢', 'Resultado', balls(last.nums, { hot: [], cold: [], farol: [] }))}
@@ -97,8 +103,7 @@ function renderGame(g, name) {
     `)}
   </div>
 
-  <div class="grid grid-2">
-    ${card('Ranking de números (score)', `
+  ${card('Ranking de números (score)', `
       <div class="annotations">
       <table>
         <tr><th>#</th><th>Nº</th><th>Score</th><th>Frec%</th><th>Ú50</th><th>Ú10</th><th>Ú5</th><th>Gap</th><th>Señal</th></tr>
@@ -117,44 +122,6 @@ function renderGame(g, name) {
       </table>
       </div>
     `)}
-    ${card('Combinaciones recomendadas (juego de 5)', `
-      ${g.combos.map((c, i) => `
-        <div class="combo">
-          <b>${i + 1}.</b> ${balls(c.nums, { hot: g.flags.hot, cold: g.flags.cold, farol: g.flags.farol })}
-          <div class="info">
-            suma ${c.suma} · ${c.pares}P/${c.impares}I · ${c.pequenos}Peq/${c.grandes}Gr<br>
-            <span class="tag">${esc(c.constr.join(' · ') || 'mezcla balanceada')}</span>
-          </div>
-        </div>`).join('')}
-      <div class="combo">
-        <div class="info" style="min-width:100%">
-        <b>Bilaterales del último:</b> ${g.bilateralesUltimo.join(', ') || '—'}<br>
-        <b>Bandas ausentes (compensar):</b> ${g.bandasAusentesUltimo.map((i) => g.bandas[i]).join(', ') || 'ninguna'}
-        </div>
-      </div>
-    `)}
-  </div>
-
-  ${g.seguimiento ? card(`Seguimiento · recomendados del sorteo #${g.seguimiento.sorteo}`, `
-    <p class="muted">Números que el modelo habría recomendado <b>antes</b> del sorteo #${g.seguimiento.sorteo} (${fmtFecha(g.seguimiento.fecha)}).</p>
-    <p>Resultado real: ${balls(g.seguimiento.resultado, {})}${g.seguimiento.balota ? ' · Súper <b>' + g.seguimiento.balota + '</b>' : ''}</p>
-    <table>
-      <tr><th>#</th><th>Combinación recomendada</th><th>Aciertos</th><th>Premio</th></tr>
-      ${g.seguimiento.combos.map((c, i) => `<tr>
-        <td>${i + 1}</td>
-        <td>${balls(c.nums, {})}</td>
-        <td><b>${c.hits}</b></td>
-        <td>${c.categoria ? esc(c.categoria) : '—'}</td>
-      </tr>`).join('')}
-    </table>
-    <p class="muted" style="margin-top:8px">Mejor resultado: <b>${g.seguimiento.maxHits}/5</b> · Números base usados (top 8): ${g.seguimiento.numerosBase.join(', ')}</p>
-    <p class="muted">Más abajo, en «Combinaciones recomendadas», está el cálculo actualizado ya con el sorteo #${g.seguimiento.sorteo} incluido (para el próximo sorteo).</p>
-  `) : ''}
-
-  ${card('🎯 Tres gatillos — 15 combinaciones cada uno (comparación lado a lado)', `
-    <p class="muted">Cada columna es un gatillo con su propia lógica y su suma objetivo. Compara las 3 listas y elige.</p>
-    ${gatillosTable(g)}
-  `)}
 
   ${card('Sistemas de combinación', `
     <h4>Sistema proporcional (8 números → 7 apuestas)</h4>
@@ -204,6 +171,22 @@ function renderGame(g, name) {
       <p class="muted" style="margin-top:8px">El modelo tiende a superar al azar en premios menores (≥2 y ≥3), no en el premio mayor: es un juego aleatorio, estas son combinaciones «razonables», no una garantía.</p>
     `)}
   </div>
+
+  ${g.seguimiento ? card(`Seguimiento · recomendados del sorteo #${g.seguimiento.sorteo}`, `
+    <p class="muted">Números que el modelo habría recomendado <b>antes</b> del sorteo #${g.seguimiento.sorteo} (${fmtFecha(g.seguimiento.fecha)}).</p>
+    <p>Resultado real: ${balls(g.seguimiento.resultado, {})}${g.seguimiento.balota ? ' · Súper <b>' + g.seguimiento.balota + '</b>' : ''}</p>
+    <table>
+      <tr><th>#</th><th>Combinación recomendada</th><th>Aciertos</th><th>Premio</th></tr>
+      ${g.seguimiento.combos.map((c, i) => `<tr>
+        <td>${i + 1}</td>
+        <td>${balls(c.nums, {})}</td>
+        <td><b>${c.hits}</b></td>
+        <td>${c.categoria ? esc(c.categoria) : '—'}</td>
+      </tr>`).join('')}
+    </table>
+    <p class="muted" style="margin-top:8px">Mejor resultado: <b>${g.seguimiento.maxHits}/5</b> · Números base usados (top 8): ${g.seguimiento.numerosBase.join(', ')}</p>
+    <p class="muted">Arriba, en «Recomendaciones — 3 gatillos», está el cálculo actualizado ya con el sorteo #${g.seguimiento.sorteo} incluido (para el próximo sorteo).</p>
+  `) : ''}
   `;
   app.innerHTML = html;
   window.scrollTo(0, 0);
