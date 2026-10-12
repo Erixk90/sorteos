@@ -16,7 +16,7 @@
     "fetch": "node scripts/fetch-data.js",
     "build:web": "node scripts/generate-web.js",
     "build:all": "npm run fetch && npm run build:web",
-    "serve": "node scripts/serve-web.js",
+    "serve": "npm run build:web && node scripts/serve-web.js",
     "predeploy": "npm run build:all",
     "deploy": "gh-pages -d web --no-history"
   }

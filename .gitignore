@@ -4,3 +4,6 @@ report/
 *.log
 *gh_credentials*
 *gh_token*
+
+# Archivo generado en build (CI lo crea y despliega; no se versiona)
+web/data.js
